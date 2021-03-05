@@ -1,65 +1,8 @@
-const { all } = require('underscore');
 const productSchema = require('../models/products/products');
 
 const productValidator = require('../validators/products.validators');
 
 module.exports = {
-
-    addNewProduct: async (req, res, next) => {
-        try {
-            let {
-                productId,
-                itemName,
-                countryOfOrigin,
-                manufacturer,
-                itemsNum,
-                colorName,
-                includedComponents,
-                exclosureMaterial,
-                itemTypeName,
-                sizeMap,
-                manufacturerContact,
-                productDimensions,
-                unitCount,
-                unitCountType
-            } = await productValidator.addProduct().validateAsync(req.body);
-            let isProductPresent = await productSchema.countDocuments({ productId});
-            if (isProductPresent) {
-                return res.json({
-                    code: 200,
-                    data: {},
-                    message: "product with same product id present already",
-                    error: null
-                });
-            }
-            const productData = await productSchema.save({
-                productId,
-                itemName,
-                countryOfOrigin,
-                manufacturer,
-                itemsNum,
-                colorName,
-                includedComponents,
-                exclosureMaterial,
-                itemTypeName,
-                sizeMap,
-                manufacturerContact,
-                productDimensions,
-                unitCount,
-                unitCountType
-            });
-            if (productData) {
-                return res.json({
-                    code: 200,
-                    data: productData,
-                    message: "product added successfully!!",
-                    error: null
-                });
-            }
-        } catch (err) {
-            next(err);
-        }
-    },
 
     listAllProduct: async (req, res, next) => {
         try {
@@ -72,6 +15,38 @@ module.exports = {
                 message: "all product fetched successfully!!",
                 error: null
             });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    approveProduct: async (req, res, next) => {
+        try {
+            let { productId, status, feedback } = await productValidator.approveProduct().validateAsync(req.body);
+            let count = await productSchema.countDocuments({_id: productId});
+            if (count) {
+                let productData = await productSchema.findOneAndUpdate({
+                    _id: productId
+                }, {
+                    $set: {
+                        feedback,
+                        isApproved: status
+                    }
+                }, {new: true}).lean();
+                return res.json({
+                    code: 200,
+                    data: productData,
+                    message: "Product status changed",
+                    error: null
+                });
+            } else {
+                return res.json({
+                    code: 400,
+                    data: {},
+                    message: "No product found",
+                    error: null
+                });
+            }
         } catch (err) {
             next(err);
         }
