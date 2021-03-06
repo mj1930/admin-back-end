@@ -122,12 +122,16 @@ module.exports = {
                 .limit(limit)
                 .lean(); 
             }
-            usersData.forEach(async (user, i) => {
+            for(let i=0; i<usersData.length; i++) {
                 let storeName = await storeSchema.findOne({
-                    userId: user._id
+                    userId: usersData[i]._id
                 }).lean();
-                usersData[i].storeName = storeName.storename;
-            });
+                usersData[i]["storename"] = storeName.storename;
+            }
+            // usersData.forEach(async (user, i) => {
+               
+            // });
+            // console.log(userData)
             if (usersData && usersData.length > 0) {
                 return res.json({
                     code: 200,
