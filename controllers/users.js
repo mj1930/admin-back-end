@@ -122,7 +122,7 @@ module.exports = {
                 .limit(limit)
                 .lean(); 
             }
-            usersData.forEach((user, i) => {
+            usersData.forEach(async (user, i) => {
                 let storeName = await storeSchema.findOne({
                     userId: user._id
                 }).lean();
