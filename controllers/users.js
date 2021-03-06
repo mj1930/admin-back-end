@@ -104,13 +104,30 @@ module.exports = {
 
     listAllUsers: async (req, res, next) => {
         try {
-            let { skip, limit } = await userValidator.listAllUsers().validateAsync(req.body);
-            let usersData = await usersSchema.find({
-                isDeleted: false
-            })
-            .skip(skip)
-            .limit(limit)
-            .lean();
+            let usersData = [];
+            let { skip, limit, status } = await userValidator.listAllUsers().validateAsync(req.body);
+            if (!status) { 
+                usersData = await usersSchema.find({
+                    isDeleted: false
+                })
+                .skip(skip)
+                .limit(limit)
+                .lean(); 
+            } else {
+                usersData = await usersSchema.find({
+                    isDeleted: false,
+                    isApproved: status
+                })
+                .skip(skip)
+                .limit(limit)
+                .lean(); 
+            }
+            usersData.forEach((user, i) => {
+                let storeName = await storeSchema.findOne({
+                    userId: user._id
+                }).lean();
+                usersData[i].storeName = storeName.storename;
+            });
             if (usersData && usersData.length > 0) {
                 return res.json({
                     code: 200,
@@ -157,5 +174,5 @@ module.exports = {
         } catch (err) {
             next(err);
         }
-    }
+    },
 }
