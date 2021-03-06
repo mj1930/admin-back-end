@@ -1,7 +1,6 @@
 const router = require('express').Router();
 const productCtrl = require('../controllers/products');
-const { authorize } = require('../middleware/auth');
 
-router.get('/get-all-products', authorize, productCtrl.listAllProduct);
-router.post('/approve-disapprove-product', authorize, productCtrl.approveProduct);
+router.get('/get-all-products', productCtrl.listAllProduct);
+router.post('/approve-disapprove-product', productCtrl.approveProduct);
 module.exports = router;
