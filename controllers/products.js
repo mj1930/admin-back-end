@@ -20,6 +20,28 @@ module.exports = {
         }
     },
 
+    filterProducts: async (req, res, next) => {
+        try {
+            let allProducts = [];
+            let { skip, limit, status } = await productValidator.filterProducts().validateAsync(req.body);
+            allProducts = await productSchema.find({
+                isDeleted: false,
+                isApproved: status
+            })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+            return res.json({
+                code: 200,
+                data: allProducts,
+                message: "all product fetched successfully!!",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
     approveProduct: async (req, res, next) => {
         try {
             let { productId, status } = await productValidator.approveProduct().validateAsync(req.body);
