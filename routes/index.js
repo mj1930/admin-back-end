@@ -1,6 +1,7 @@
 const users = require('./users');
 const products = require('./products');
 const store = require('./stores');
+const categoy = require('./categories');
 const verification = require('./verification');
 
 const errorMiddleware = require('../middleware/error');
@@ -19,6 +20,7 @@ module.exports = app => {
             req.originalUrl.indexOf('/users') > -1 ||
             req.originalUrl.indexOf('/products') > -1 ||
             req.originalUrl.indexOf('/store') > -1 ||
+            req.originalUrl.indexOf('/category') > -1 ||
             req.originalUrl.indexOf('/verify') > -1
         ) {
             next()
@@ -29,6 +31,7 @@ module.exports = app => {
     app.use('/users', users);
     app.use('/products', products);
     app.use('/store', store);
+    app.use('/category', categoy);
     app.use('/verify', verification);
     app.use(errorMiddleware);
 }
