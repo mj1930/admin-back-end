@@ -47,34 +47,40 @@ module.exports = {
         }
     },
 
-    listAllCategoriesSubCategories: async (req, res, next) => {
+    listAllCategories: async (req, res, next) => {
         try {
-            let { skip, limit } = await categoryValidator.listCategoriesSubCategories().validateAsync(req.body);
+            let { skip, limit } = await categoryValidator.listCategories().validateAsync(req.body);
             let categoriesData = await categorySchema.find({
                 isDeleted: false
             })
             .skip(skip)
             .limit(limit)
             .lean();
-            let dataArr = [];
-            for (let i = 0; i < categoriesData.length; i++) {
-                let category = categoriesData[i];
-                let obj = {
-                    category: category.categoryName,
-                    subCategories: []
-                };
-                let subCategoriesData = await subCategorySchema.find({
-                    categoryId: category._id,
-                    isDeleted: false
-                }).lean();
-                let names = _.pluck(subCategoriesData, 'subCategoryName');
-                obj.subCategories = names;
-                dataArr.push(obj);
-            };
             return res.json({
                 code: 200,
-                data: dataArr,
-                message: "Categories and sub categories fetched successfully",
+                data: categoriesData,
+                message: "Categories fetched successfully",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    listAllSubCategories: async (req, res, next) => {
+        try {
+            let { skip, limit, categoryId } = await categoryValidator.listSubcategories().validateAsync(req.body);
+            let subCategoriesData = await subCategorySchema.find({
+                categoryId,
+                isDeleted: false
+            })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+            return res.json({
+                code: 200,
+                data: subCategoriesData,
+                message: "Sub categories fetched successfully",
                 error: null
             });
         } catch (err) {

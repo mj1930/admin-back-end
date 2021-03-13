@@ -8,7 +8,8 @@ const productSchema = new Schema({
     },
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'sellers'
+        ref: 'sellers',
+        default: null
     },
     itemName: {
         type: String,
@@ -26,13 +27,26 @@ const productSchema = new Schema({
         type: String,
         default: ""
     },
-    modelNumber: {
-        type: String,
-        default: ""
-    },
     dimensions: {
-        type: String,
-        default: ""
+        type: Object,
+        default: {
+            length: {
+                type: Number,
+                default: 0
+            },
+            breadth: {
+                type: Number,
+                default: 0
+            },
+            height: {
+                type: Number,
+                default: 0
+            }
+        }
+    },
+    productImg: {
+        type: Array,
+        default: []
     },
     weight: {
         type: String,
@@ -50,8 +64,12 @@ const productSchema = new Schema({
         type: String,
         default: ""
     },
+    availableUnits: {
+        type: Number,
+        default: ""
+    },
     unitCount: {
-        type: String,
+        type: Number,
         default: ""
     },
     mrp: {
@@ -62,11 +80,11 @@ const productSchema = new Schema({
         type: String,
         default: ""
     },
-    category: {
+    categoryId: {
         type: Schema.Types.ObjectId,
         ref: 'category'
     },
-    subCategory: {
+    subCategoryId: {
         type: Schema.Types.ObjectId,
         ref: 'subCategory'
     },
@@ -88,11 +106,9 @@ const productSchema = new Schema({
     }
 }, { timestamps: true});
 
-
 productSchema.index({ city: 1 });
 productSchema.index({ itemName: 1 });
 productSchema.index({ barcode: 1 });
-
 const Products = mongoose.model('products', productSchema);
 
 module.exports = Products;

@@ -14,9 +14,17 @@ exports.addSubCategory = () => {
     });
 };
 
-exports.listCategoriesSubCategories = () => {
+exports.listCategories = () => {
     return Joi.object().keys({
         skip: Joi.number().required(),
         limit: Joi.number().required()
+    });
+};
+
+exports.listSubcategories = () => {
+    return Joi.object().keys({
+        skip: Joi.number().required(),
+        limit: Joi.number().required(),
+        categoryId: Joi.string().required().trim()
     });
 };
