@@ -39,7 +39,7 @@ module.exports = {
             return res.json({
                 code: 200,
                 data: addSubcategory,
-                message: "Added Category and subcategory successfully !!",
+                message: "Added Subcategory successfully !!",
                 error: null
             });
         } catch (err) {
