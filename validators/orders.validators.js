@@ -4,7 +4,7 @@ exports.addOrder = () => {
     return Joi.object().keys({
         mode: Joi.string().required().trim(),
         products: Joi.object().required(),
-        userId: Joi.string().required().trim(),
+        userId: Joi.string().optional().trim(),
         totalAmnt: Joi.string().required().trim(),
         address: Joi.object().required(),
         userGstin: Joi.string().optional(),

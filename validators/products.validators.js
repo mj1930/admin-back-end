@@ -21,4 +21,10 @@ exports.filterProducts = () => {
         limit: Joi.number().required(),
         status: Joi.boolean().required()
     });
-}
+};
+
+exports.searchProduct = () => {
+    return Joi.object().keys({
+        term: Joi.string().required().trim()
+    });
+};
