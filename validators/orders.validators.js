@@ -13,6 +13,13 @@ exports.addOrder = () => {
     });
 };
 
+exports.listOrders = () => {
+    return Joi.object().keys({
+        skip:  Joi.string().required().trim(),
+        limit: Joi.string().required().trim()
+    });
+};
+
 exports.filterOrders = () => {
     return Joi.object().keys({
         skip:  Joi.string().required().trim(),
