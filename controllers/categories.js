@@ -103,6 +103,7 @@ module.exports = {
                 let obj = {
                     category: category.categoryName,
                     categoryId: category._id,
+                    status: category.status,
                     subCategories: []
                 };
                 let subCategoriesData = await subCategorySchema.find({
