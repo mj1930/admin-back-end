@@ -86,5 +86,40 @@ module.exports = {
         } catch (err) {
             next(err);
         }
+    },
+
+    listAllCategoriesSubCategories: async (req, res, next) => {
+        try {
+            let { skip, limit } = await categoryValidator.listCategoriesSubCategories().validateAsync(req.body);
+            let categoriesData = await categorySchema.find({
+                isDeleted: false
+            })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+            let dataArr = [];
+            for (let i = 0; i < categoriesData.length; i++) {
+                let category = categoriesData[i];
+                let obj = {
+                    category: category.categoryName,
+                    categoryId: category._id,
+                    subCategories: []
+                };
+                let subCategoriesData = await subCategorySchema.find({
+                    categoryId: category._id,
+                    isDeleted: false
+                }, {_id: 1, subCategoryName: 1}).lean();
+                obj.subCategories = subCategoriesData;
+                dataArr.push(obj);
+            };
+            return res.json({
+                code: 200,
+                data: dataArr,
+                message: "Categories and sub categories fetched successfully",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
     }
 }

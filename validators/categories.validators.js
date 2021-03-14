@@ -28,3 +28,10 @@ exports.listSubcategories = () => {
         categoryId: Joi.string().required().trim()
     });
 };
+
+exports.listCategoriesSubCategories = () => {
+    return Joi.object().keys({
+        skip: Joi.number().required(),
+        limit: Joi.number().required()
+    });
+}

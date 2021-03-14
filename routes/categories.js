@@ -5,5 +5,6 @@ router.post('/add-category', categoryCtrl.addCategorySubCategory);
 router.post('/add-subcategory', categoryCtrl.addSubCategory);
 router.post('/get-all-categories', categoryCtrl.listAllCategories);
 router.post('/get-all-subcategories', categoryCtrl.listAllSubCategories);
+router.post('/get-all', categoryCtrl.listAllCategoriesSubCategories);
 
 module.exports = router;
