@@ -10,6 +10,10 @@ const orderSchema = new Schema({
         type: Array,
         default: [
             {
+                productImg: {
+                    type: Array,
+                    default: []
+                },
                 productName: {
                     type: String,
                     default: ""
@@ -36,7 +40,7 @@ const orderSchema = new Schema({
     },
     userId: {
         type: Schema.Types.ObjectId,
-        ref: 'users',
+        ref: 'customers',
         default: null
     },
     totalAmnt: {
