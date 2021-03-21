@@ -5,8 +5,8 @@ exports.addOrder = () => {
         mode: Joi.string().required().trim(),
         products: Joi.object().required(),
         userId: Joi.string().optional().trim(),
-        totalAmnt: Joi.string().required().trim(),
-        address: Joi.object().required(),
+        totalAmnt: Joi.number().required(),
+        address: Joi.string().required(),
         userGstin: Joi.string().optional(),
         businessName: Joi.string().optional(),
         paymentMode:  Joi.string().required().trim(),
@@ -15,8 +15,8 @@ exports.addOrder = () => {
 
 exports.listOrders = () => {
     return Joi.object().keys({
-        skip:  Joi.string().required().trim(),
-        limit: Joi.string().required().trim()
+        skip:  Joi.number().required(),
+        limit: Joi.number().required()
     });
 };
 
