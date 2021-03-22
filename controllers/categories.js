@@ -53,6 +53,7 @@ module.exports = {
             let categoriesData = await categorySchema.find({
                 isDeleted: false
             })
+            .sort({createdAt: -1})
             .skip(skip)
             .limit(limit)
             .lean();
@@ -74,6 +75,7 @@ module.exports = {
                 categoryId,
                 isDeleted: false
             })
+            .sort({createdAt: -1})
             .skip(skip)
             .limit(limit)
             .lean();
@@ -94,6 +96,7 @@ module.exports = {
             let categoriesData = await categorySchema.find({
                 isDeleted: false
             })
+            .sort({createdAt: -1})
             .skip(skip)
             .limit(limit)
             .lean();
