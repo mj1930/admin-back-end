@@ -80,7 +80,7 @@ module.exports = {
                     _id: productId
                 }, {
                     $set: {
-                        //feedback,
+                        feedback,
                         isApproved: status
                     }
                 }, {new: true}).lean();

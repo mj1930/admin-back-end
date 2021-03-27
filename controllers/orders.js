@@ -6,12 +6,13 @@ module.exports = {
 
     addOrder: async (req, res, next) => {
         try {
-            let { mode, products, userId, totalAmnt, 
+            let { mode, products, userId, totalAmnt, sellerId,
                 address, userGstin, businessName, paymentMode } = await orderValidator.addOrder().validateAsync(req.body);
             let orderData = await orderSchema.create({
                 mode,
                 products,
                 userId,
+                sellerId,
                 totalAmnt,
                 address,
                 userGstin,

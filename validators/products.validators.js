@@ -4,7 +4,7 @@ exports.approveProduct = () => {
     return Joi.object().keys({
         productId: Joi.string().required().trim(),
         status: Joi.boolean().required(),
-        //feedback: Joi.string().optional()
+        feedback: Joi.string().optional()
     });
 }
 
@@ -15,11 +15,11 @@ exports.listAllProducts = () => {
     });
 }
 
-exports.filterProducts = () => {
+exports.filterOrders = () => {
     return Joi.object().keys({
         skip: Joi.number().required(),
         limit: Joi.number().required(),
-        status: Joi.boolean().required()
+        status: Joi.boolean().required(),
     });
 };
 

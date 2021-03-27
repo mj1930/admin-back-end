@@ -10,6 +10,7 @@ exports.addOrder = () => {
         userGstin: Joi.string().optional(),
         businessName: Joi.string().optional(),
         paymentMode:  Joi.string().required().trim(),
+        sellerId: Joi.string().optional().trim()
     });
 };
 
