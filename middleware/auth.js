@@ -19,5 +19,24 @@ module.exports = {
         } catch (err) {
             next(err);
         }
+    },
+
+    authAdmin: async (req, res, next) => {
+        const authHeader = req.headers['authorization'];
+        const accessToken = authHeader && authHeader.split(' ')[1] || authHeader;
+        if (!accessToken) {
+            return next(new errorHandler('Un-Authorized Access(Missing accessToken)', 401));
+        }
+        try {
+            let userData = await jwtService.verify(accessToken);
+            if (userData && userData._id && userData.isAdmin) {
+                req.decoded = userData;
+                next();
+            } else {
+                next(new errorHandler('Not a valid user', 401));
+            }
+        } catch (err) {
+            next(err);
+        }
     }
 }

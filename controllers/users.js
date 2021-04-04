@@ -1,4 +1,4 @@
-const usersSchema = require('../models/users/users');
+const usersSchema = require('../models/admin/users');
 const storeSchema = require('../models/stores/storenames');
 
 const userValidator = require('../validators/users.validators');
@@ -22,7 +22,8 @@ module.exports = {
                     const accessToken = await jwtService.generateAccessToken({
                         _id: data._id,
                         name: data.name,
-                        email: data.email
+                        email: data.email,
+                        isAdmin: data.isAdmin
                     });
                     return res.json({
                         code: 200,
@@ -78,7 +79,8 @@ module.exports = {
             const sellerData = await data.save();
             const accessToken = await jwtService.generateAccessToken({
                 _id: sellerData._id,
-                name: sellerData.name
+                name: sellerData.name,
+                isAdmin: data.isAdmin
             });
             delete sellerData.mobile;
             if (sellerData) {

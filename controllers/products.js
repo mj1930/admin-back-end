@@ -73,7 +73,7 @@ module.exports = {
 
     approveProduct: async (req, res, next) => {
         try {
-            let { productId, status } = await productValidator.approveProduct().validateAsync(req.body);
+            let { productId, status, feedback } = await productValidator.approveProduct().validateAsync(req.body);
             let count = await productSchema.countDocuments({_id: productId});
             if (count) {
                 let productData = await productSchema.findOneAndUpdate({

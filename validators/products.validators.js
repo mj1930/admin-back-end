@@ -4,7 +4,7 @@ exports.approveProduct = () => {
     return Joi.object().keys({
         productId: Joi.string().required().trim(),
         status: Joi.boolean().required(),
-        feedback: Joi.string().optional()
+        feedback: Joi.string().allow('').optional()
     });
 }
 
