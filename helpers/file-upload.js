@@ -14,7 +14,7 @@ exports.upload = multer({
     storage: multerS3({
         s3: s3,
         // queueSize: 1,
-        ACL: 'public-read',
+        acl: 'public-read',
         bucket: process.env.BUCKET_NAME,
         contentType: multerS3.AUTO_CONTENT_TYPE,
         key: function (req, file, callback) {

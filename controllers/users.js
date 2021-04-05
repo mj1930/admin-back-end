@@ -1,4 +1,5 @@
 const usersSchema = require('../models/admin/users');
+const sellerSchema = require('../models/users/users');
 const storeSchema = require('../models/stores/storenames');
 
 const userValidator = require('../validators/users.validators');
@@ -109,7 +110,7 @@ module.exports = {
             let usersData = [];
             let { skip, limit, status } = await userValidator.listAllUsers().validateAsync(req.body);
             if (!status) { 
-                usersData = await usersSchema.find({
+                usersData = await sellerSchema.find({
                     isDeleted: false
                 })
                 .skip(skip)
@@ -157,7 +158,7 @@ module.exports = {
     getUserData: async (req, res, next) => {
         try {
             let userId = req.decoded._id;
-            let userData = await usersSchema.findOne({
+            let userData = await sellerSchema.findOne({
                 _id: userId
             }).lean();
             if (userData) {
