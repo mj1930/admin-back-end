@@ -23,8 +23,15 @@ exports.listOrders = () => {
 
 exports.filterOrders = () => {
     return Joi.object().keys({
-        skip:  Joi.string().required().trim(),
-        limit: Joi.string().required().trim(),
+        skip:  Joi.number().required(),
+        limit: Joi.number().required(),
+        status: Joi.string().required().trim()
+    });
+};
+
+exports.updateOrder = () => {
+    return Joi.object().keys({
+        orderId: Joi.string().required().trim(),
         status: Joi.string().required().trim()
     });
 };
