@@ -5,5 +5,6 @@ router.get('/get-all-products', productCtrl.listAllProduct);
 router.post('/approve-disapprove-product', productCtrl.approveProduct);
 router.post('/filter-products', productCtrl.filterProducts);
 router.get('/search-products', productCtrl.searchFromProducts);
+router.get('/get-product-details', productCtrl.getProductDetails);
 
 module.exports = router;

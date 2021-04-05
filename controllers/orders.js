@@ -71,7 +71,7 @@ module.exports = {
     updateOrderStatus: async (req, res, next) => {
         try {
             let { orderId, status } = await orderValidator.updateOrder().validateAsync(req.body);
-            let orders = await orderSchema.findOneAndReplace({
+            let orders = await orderSchema.findOneAndUpdate({
                 _id: orderId
             }, {
                 $set: {

@@ -28,3 +28,9 @@ exports.searchProduct = () => {
         term: Joi.string().required().trim()
     });
 };
+
+exports.getProductDetails = () => {
+    return Joi.object().keys({
+        productId: Joi.string().required().trim()
+    })
+}
