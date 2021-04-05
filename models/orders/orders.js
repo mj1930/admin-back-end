@@ -34,6 +34,10 @@ const orderSchema = new Schema({
                     type: Schema.Types.ObjectId,
                     ref: 'sellers',
                     default: null
+                },
+                sellerName: {
+                    type: String,
+                    default: ""
                 }
             }
         ]

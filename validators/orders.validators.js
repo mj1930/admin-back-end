@@ -9,8 +9,7 @@ exports.addOrder = () => {
         address: Joi.string().required(),
         userGstin: Joi.string().allow('').optional(),
         businessName: Joi.string().allow('').optional(),
-        paymentMode:  Joi.string().required().trim(),
-        sellerId: Joi.string().allow('').optional()
+        paymentMode:  Joi.string().required().trim()
     });
 };
 
