@@ -72,7 +72,7 @@ module.exports = {
     getAllPermission: async (req, res, next) => {
         try {
             let { skip, limit } = await permissionValidator.listAllPermission().validateAsync(req.body);
-            let data = await permissionSchema.findOne({
+            let data = await permissionSchema.find({
             })
             .skip(skip)
             .limit(limit)
@@ -83,6 +83,22 @@ module.exports = {
                 message: "All Permissions fetched successfully",
                 error: null
             });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    getAllUsers: async(req, res, next) => {
+        try {
+            let data = await adminUserSchema.find({
+                isDeleted: false
+            }).lean();
+            return res.json({
+                code: 200,
+                data,
+                message: "All users fetched successfully",
+                error: null
+            })
         } catch (err) {
             next(err);
         }

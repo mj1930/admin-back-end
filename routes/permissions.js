@@ -7,5 +7,6 @@ router.post('/add-permission', authAdmin, permissionCtrl.addPermission);
 router.post('/remove-permission', authAdmin, permissionCtrl.removePermission);
 router.post('/list-all-permission', authAdmin, permissionCtrl.getAllPermission);
 router.get('/list-user-permission', permissionCtrl.getPermissionForOneUser);
+router.post('/get-all-users', permissionCtrl.getAllUsers);
 
 module.exports = router;
