@@ -1,6 +1,7 @@
 const usersSchema = require('../models/admin/users');
 const sellerSchema = require('../models/users/users');
 const storeSchema = require('../models/stores/storenames');
+const permissionSchema = require('../models/admin/permissions');
 
 const userValidator = require('../validators/users.validators');
 const crypto = require('../utils/crypto/Crypto');
@@ -19,6 +20,11 @@ module.exports = {
                     email
                 }).lean();
                 let userPassword = await crypto.staticDecrypter(data.password);
+                let id = data._id;
+                let permissions = await permissionSchema.findOne({
+                    userId: id
+                }).lean();
+                data.permissions = permissions;
                 if(password === userPassword) {
                     const accessToken = await jwtService.generateAccessToken({
                         _id: data._id,
