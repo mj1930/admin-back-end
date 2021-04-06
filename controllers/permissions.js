@@ -52,7 +52,7 @@ module.exports = {
         }
     },
 
-    getAllPermission: async (req, res, next) => {
+    getPermissionForOneUser: async (req, res, next) => {
         try {
             let { userId } = await permissionValidator.listPermissionOneUser().validateAsync(req.params);
             let data = await permissionSchema.findOne({
@@ -69,7 +69,7 @@ module.exports = {
         }
     },
 
-    getPermissionForOneUser: async (req, res, next) => {
+    getAllPermission: async (req, res, next) => {
         try {
             let { skip, limit } = await permissionValidator.listAllPermission().validateAsync(req.body);
             let data = await permissionSchema.findOne({
