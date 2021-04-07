@@ -188,4 +188,25 @@ module.exports = {
             next(err);
         }
     },
+
+    sortUser: async (req, res, next) => {
+        try {
+            let { key, sortBy, skip, limit } = await userValidator.sortUser().validateAsync(req.body);
+            let query = {};
+            query[key] = sortBy;
+            let products = await sellerSchema.find({})
+            .sort(query)
+            .skip(skip)
+            .limit(limit)
+            .lean();
+            return res.json({
+                code: 200,
+                data: products,
+                message: "Sorted List",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
 }

@@ -118,5 +118,28 @@ module.exports = {
         } catch(err) {
             next(err);
         }
+    },
+
+    sortProduct: async (req, res, next) => {
+        try {
+            let { key, sortBy, skip, limit } = await productValidator.sortProducts().validateAsync(req.body);
+            let query = {};
+            query[key] = sortBy;
+            let products = await productSchema.find({
+                isApproved: true
+            })
+            .sort(query)
+            .skip(skip)
+            .limit(limit)
+            .lean();
+            return res.json({
+                code: 200,
+                data: products,
+                message: "Sorted List",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
     }
 }

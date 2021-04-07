@@ -127,5 +127,26 @@ module.exports = {
         } catch (err) {
             next(err);
         }
+    },
+
+    sortUser: async (req, res, next) => {
+        try {
+            let { key, sortBy, skip, limit } = await categoryValidator.sortCategory().validateAsync(req.body);
+            let query = {};
+            query[key] = sortBy;
+            let products = await categoryValidator.find({})
+            .sort(query)
+            .skip(skip)
+            .limit(limit)
+            .lean();
+            return res.json({
+                code: 200,
+                data: products,
+                message: "Sorted List",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
     }
 }

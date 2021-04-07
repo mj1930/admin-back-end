@@ -24,3 +24,11 @@ exports.listAllUsers = () => {
     });
 }
 
+exports.sortUser = () => {
+    return Joi.object().keys({
+        key: Joi.string().required().trim(),
+        sortBy: Joi.number().required(),
+        skip: Joi.number().required(),
+        limit: Joi.number().required()
+    });
+};

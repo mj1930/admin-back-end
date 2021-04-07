@@ -34,3 +34,12 @@ exports.updateOrder = () => {
         status: Joi.string().required().trim()
     });
 };
+
+exports.sortOrder = () => {
+    return Joi.object().keys({
+        key: Joi.string().required().trim(),
+        sortBy: Joi.number().required(),
+        skip: Joi.number().required(),
+        limit: Joi.number().required()
+    });
+};

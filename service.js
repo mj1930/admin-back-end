@@ -10,17 +10,17 @@ const app = express();
 
 const initializeApp = async () => {
     const port = process.env.PORT;
+    app.use(express.static(__dirname + '/admin-frontend'))
     require("./connection/db");
     require('./config/express/index')(app, express);
     require("./routes/index")(app);
     app.use(require('./middleware/error'));
-
-    app.get('/', (req, res, next) => {
-        res.json({
-            code: 200,
-            title: 'Everything looks fine.'
-        });
-    });
+    // app.get('/', (req, res, next) => {
+    //     res.json({
+    //         code: 200,
+    //         title: 'Everything looks fine.'
+    //     });
+    // });
     if (process.env.SSL_ENV === 'production') {
         https.createServer({
             key: fs.readFileSync(process.env.PRIVATE_KEY),
