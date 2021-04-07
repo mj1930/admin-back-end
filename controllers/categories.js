@@ -2,16 +2,16 @@ const categorySchema = require('../models/categories/categories');
 const subCategorySchema = require('../models/categories/subCategories');
 
 const categoryValidator = require('../validators/categories.validators');
-const _ = require('underscore');
 module.exports = {
 
     addCategorySubCategory: async (req, res, next) => {
         try {
-            let img = req.file ? _.pluck(req.file, 'location') : [];
+            let img = req.file ? req.file.location: "";
+            console.log(req.file)
             let { category, subCategory } = await categoryValidator.addCategory().validateAsync(req.body);
             let addCategoryData = await categorySchema.create({
                 categoryName: category,
-                // img,
+                img,
                 status: true
             });
             let addSubcategory = await subCategorySchema.create({
