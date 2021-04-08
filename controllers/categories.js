@@ -134,7 +134,7 @@ module.exports = {
             let { key, sortBy, skip, limit } = await categoryValidator.sortCategory().validateAsync(req.body);
             let query = {};
             query[key] = sortBy;
-            let products = await categoryValidator.find({})
+            let products = await categorySchema.find({})
             .sort(query)
             .skip(skip)
             .limit(limit)
