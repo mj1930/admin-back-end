@@ -134,14 +134,20 @@ module.exports = {
             let { key, sortBy, skip, limit } = await categoryValidator.sortCategory().validateAsync(req.body);
             let query = {};
             query[key] = sortBy;
-            let products = await categorySchema.find({})
+            let categories = await categorySchema.find({})
             .sort(query)
             .skip(skip)
             .limit(limit)
             .lean();
+            for (let i =0; i < categories.length;i++) {
+                let subCategories = await subCategorySchema.find({
+                    categoryId: categories[i]._id
+                }).lean();
+                categories[i].subCategories = subCategories;
+            }
             return res.json({
                 code: 200,
-                data: products,
+                data: categories,
                 message: "Sorted List",
                 error: null
             });
