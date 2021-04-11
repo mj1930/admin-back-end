@@ -1,6 +1,8 @@
 const orderSchema = require('../models/orders/orders');
+const productSchema = require('../models/products/products');
 
 const orderValidator = require('../validators/orders.validators');
+const _ = require('underscore');
 
 module.exports = {
 
@@ -18,6 +20,15 @@ module.exports = {
                 businessName,
                 paymentMode
             });
+            // for (let i = 0; i < products.length;i++) {
+                await productSchema.updateOne({
+                    _id: products.productId
+                }, {
+                    $inc: {
+                        availableUnits : -products.quantity
+                    }
+                });
+            // }
             return res.json({
                 code: 200,
                 data: orderData,

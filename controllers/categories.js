@@ -7,7 +7,6 @@ module.exports = {
     addCategorySubCategory: async (req, res, next) => {
         try {
             let img = req.file ? req.file.location: "";
-            console.log(req.file)
             let { category, subCategory } = await categoryValidator.addCategory().validateAsync(req.body);
             let addCategoryData = await categorySchema.create({
                 categoryName: category,
