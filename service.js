@@ -10,7 +10,6 @@ const app = express();
 
 const initializeApp = async () => {
     const port = process.env.PORT;
-    app.use(express.static(__dirname + '/admin-frontend'))
     require("./connection/db");
     require('./config/express/index')(app, express);
     require("./routes/index")(app);
