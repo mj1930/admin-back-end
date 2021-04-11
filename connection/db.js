@@ -20,7 +20,7 @@ mongoose.connect(
 			console.error(chalk.red('Could not connect to MongoDB!'));
 			console.log(chalk.red(err));
 		} else {
-			console.log('MongoDB: Connected to Seller Database !');
+			console.log('MongoDB: Connected to Admin Database !');
 		}
 	}
 );
