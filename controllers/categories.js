@@ -105,7 +105,7 @@ module.exports = {
             for (let i = 0; i < categoriesData.length; i++) {
                 let category = categoriesData[i];
                 let obj = {
-                    category: category.categoryName,
+                    categoryName: category.categoryName,
                     categoryId: category._id,
                     status: category.status,
                     subCategories: []
