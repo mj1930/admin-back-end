@@ -69,7 +69,7 @@ module.exports = {
             });
             if (count) {
                 return res.json({
-                    code: 200,
+                    code: 400,
                     message: 'Email already exists !!',
                     data:{},
                     error: null
@@ -149,7 +149,7 @@ module.exports = {
                 });
             } else {
                 return res.json({
-                    code: 200,
+                    code: 400,
                     data: {},
                     message: "No users found !!",
                     error: null
