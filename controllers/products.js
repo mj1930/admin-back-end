@@ -47,7 +47,7 @@ module.exports = {
             let { term } = await productValidator.searchProduct().validateAsync(req.query);
             let searchedProducts = await productSchema.find({
                 $or: [
-                    {itemName: { $regex: new RegExp(term, 'i') }},
+                    { itemName: { $regex: new RegExp(term, 'i') }},
                     { barcode:  { $regex: new RegExp(term, 'i') }}
                 ]
             }).lean();
@@ -125,9 +125,7 @@ module.exports = {
             let { key, sortBy, skip, limit } = await productValidator.sortProducts().validateAsync(req.body);
             let query = {};
             query[key] = sortBy;
-            let products = await productSchema.find({
-                isApproved: true
-            })
+            let products = await productSchema.find()
             .sort(query)
             .skip(skip)
             .limit(limit)

@@ -31,3 +31,11 @@ exports.sortUser = () => {
         limit: Joi.number().required()
     });
 };
+
+exports.searchUser = () => {
+    return Joi.object().keys({
+        skip: Joi.number().required(),
+        limit: Joi.number().required(),
+        search: Joi.string().optional()
+    });
+}

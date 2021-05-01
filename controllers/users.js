@@ -207,5 +207,28 @@ module.exports = {
         } catch (err) {
             next(err);
         }
+    },
+
+    searchUser: async (req, res, next) => {
+        try {
+            let { skip, limit, search } = await userValidator.searchUser().validateAsync(req.body);
+            let userData = await sellerSchema.find({
+                $or: [
+                    { email: { $regex: new RegExp(search, 'i') }},
+                    { name:  { $regex: new RegExp(search, 'i') }}
+                ]
+            })
+            .skip(skip)
+            .limit(limit)
+            .lean();
+            return res.send({
+                code: 200,
+                data: userData,
+                message: "Searched User",
+                error: null
+            })
+        } catch (err) {
+            next(err);
+        }
     }
 }

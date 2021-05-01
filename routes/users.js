@@ -7,5 +7,6 @@ router.post('/signup', userCtrl.signup);
 router.post('/get-all-users', userCtrl.listAllUsers);
 router.get('/get-user-details', userCtrl.getUserData);
 router.post('/sort-user', userCtrl.sortUser);
+router.post('/search-user', userCtrl.searchUser);
 
 module.exports = router;
