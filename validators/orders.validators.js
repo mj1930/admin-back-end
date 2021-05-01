@@ -43,3 +43,12 @@ exports.sortOrder = () => {
         limit: Joi.number().required()
     });
 };
+
+exports.searchOrders = () => {
+    return Joi.object().keys({
+        skip:  Joi.number().required(),
+        limit: Joi.number().required(),
+        search: Joi.string().required().trim(),
+        status: Joi.string().optional().allow('').trim()
+    });
+};

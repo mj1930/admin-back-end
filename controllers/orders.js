@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const orderSchema = require('../models/orders/orders');
 const productSchema = require('../models/products/products');
 
@@ -46,6 +47,9 @@ module.exports = {
             let orders = await orderSchema.find({})
             .skip(skip)
             .limit(limit)
+            .sort({
+                createdAt: -1
+            })
             .lean();
             return res.json({
                 code: 200,
@@ -113,6 +117,35 @@ module.exports = {
                 code: 200,
                 data: products,
                 message: "Sorted List",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    searchProductsByTerm: async(req, res, next) => {
+        try {
+            const { skip, limit, search, status } = await orderValidator.searchOrders().validateAsync(req.body);
+            let productDetails = await orderSchema.find({
+                $or: [
+                    {
+                        status
+                    },
+                    {
+                        paymentMode: { $regex: new RegExp(search, 'i') }
+                    }
+                ]
+            }).sort({
+                createdAt: -1
+            })
+            .skip(skip)
+            .limit(limit)
+            .lean()
+            return res.send({
+                code: 200,
+                data: productDetails,
+                message: "Searched list with all possibility",
                 error: null
             });
         } catch (err) {
