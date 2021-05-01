@@ -128,7 +128,7 @@ module.exports = {
         try {
             const { skip, limit, search, status } = await orderValidator.searchOrders().validateAsync(req.body);
             let productDetails = await orderSchema.find({
-                $or: [
+                $and: [
                     {
                         status
                     },
