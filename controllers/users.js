@@ -131,10 +131,12 @@ module.exports = {
                 .lean(); 
             }
             for(let i = 0; i < usersData.length; i++) {
-                let storeName = await storeSchema.findOne({
+                if (usersData[i]['mobile'])
+                    usersData[i]['mobile'] = await crypto.staticDecrypter(usersData[i]['mobile'])
+                let storeData = await storeSchema.findOne({
                     userId: usersData[i]._id
                 }).lean();
-                usersData[i]["storename"] = storeName ? storeName.storename : "";
+                usersData[i]["storename"] = storeData ? storeData.storename : "";
             }
             // usersData.forEach(async (user, i) => {
                

@@ -66,11 +66,15 @@ const productSchema = new Schema({
     },
     availableUnits: {
         type: Number,
-        default: ""
+        default: 0
+    },
+    rating: {
+        type: Number,
+        default: 0
     },
     unitCount: {
         type: Number,
-        default: ""
+        default: 0
     },
     mrp: {
         type: String,
