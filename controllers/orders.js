@@ -22,13 +22,13 @@ module.exports = {
                 paymentMode
             });
             // for (let i = 0; i < products.length;i++) {
-                await productSchema.updateOne({
-                    _id: products.productId
-                }, {
-                    $inc: {
-                        availableUnits : -products.quantity
-                    }
-                });
+            await productSchema.updateOne({
+                _id: products.productId
+            }, {
+                $inc: {
+                    availableUnits: -products.quantity
+                }
+            });
             // }
             return res.json({
                 code: 200,
@@ -45,12 +45,12 @@ module.exports = {
         try {
             let { skip, limit } = await orderValidator.listOrders().validateAsync(req.body);
             let orders = await orderSchema.find({})
-            .skip(skip)
-            .limit(limit)
-            .sort({
-                createdAt: -1
-            })
-            .lean();
+                .skip(skip)
+                .limit(limit)
+                .sort({
+                    createdAt: -1
+                })
+                .lean();
             return res.json({
                 code: 200,
                 data: orders,
@@ -68,9 +68,9 @@ module.exports = {
             let orders = await orderSchema.find({
                 orderStatus: status
             })
-            .skip(skip)
-            .limit(limit)
-            .lean();
+                .skip(skip)
+                .limit(limit)
+                .lean();
             return res.json({
                 code: 200,
                 data: orders,
@@ -89,9 +89,9 @@ module.exports = {
                 _id: orderId
             }, {
                 $set: {
-                    orderStatus: status  
+                    orderStatus: status
                 }
-            }, { new : true}).lean();
+            }, { new: true }).lean();
             return res.json({
                 code: 200,
                 data: orders,
@@ -109,10 +109,10 @@ module.exports = {
             let query = {};
             query[key] = sortBy;
             let products = await orderSchema.find({})
-            .sort(query)
-            .skip(skip)
-            .limit(limit)
-            .lean();
+                .sort(query)
+                .skip(skip)
+                .limit(limit)
+                .lean();
             return res.json({
                 code: 200,
                 data: products,
@@ -124,13 +124,13 @@ module.exports = {
         }
     },
 
-    searchProductsByTerm: async(req, res, next) => {
+    searchOrdersByTerm: async (req, res, next) => {
         try {
             const { skip, limit, search, status } = await orderValidator.searchOrders().validateAsync(req.body);
             let productDetails = await orderSchema.find({
                 $and: [
                     {
-                        status
+                        orderStatus: status
                     },
                     {
                         paymentMode: { $regex: new RegExp(search, 'i') }
@@ -138,10 +138,40 @@ module.exports = {
                 ]
             }).sort({
                 createdAt: -1
-            })
-            .skip(skip)
-            .limit(limit)
-            .lean()
+            }).skip(skip)
+                .limit(limit)
+                .lean()
+            return res.send({
+                code: 200,
+                data: productDetails,
+                message: "Searched list with all possibility",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    searchOrdersByOrderId: async (req, res, next) => {
+        try {
+            const { skip, limit, orderId, status, search } = await orderValidator.searchOrdersById().validateAsync(req.body);
+            let productDetails = await orderSchema.find({
+                $and: [
+                    {
+                        _id: orderId
+                    },
+                    {
+                        orderStatus: status
+                    },
+                    {
+                        paymentMode: { $regex: new RegExp(search, 'i') }
+                    }
+                ]
+            }).sort({
+                createdAt: -1
+            }).skip(skip)
+                .limit(limit)
+                .lean()
             return res.send({
                 code: 200,
                 data: productDetails,

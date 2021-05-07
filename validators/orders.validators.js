@@ -3,7 +3,7 @@ const Joi = require('@hapi/joi');
 exports.addOrder = () => {
     return Joi.object().keys({
         mode: Joi.string().required().trim(),
-        products: Joi.object().required(),
+        products: Joi.array().required(),
         userId: Joi.string().allow('').optional(),
         totalAmnt: Joi.number().required(),
         address: Joi.string().required(),
@@ -49,6 +49,16 @@ exports.searchOrders = () => {
         skip:  Joi.number().required(),
         limit: Joi.number().required(),
         search: Joi.string().required().trim(),
+        status: Joi.string().optional().allow('').trim()
+    });
+};
+
+exports.searchOrdersById = () => {
+    return Joi.object().keys({
+        skip:  Joi.number().required(),
+        limit: Joi.number().required(),
+        orderId: Joi.string().required().trim(),
+        search: Joi.string().optional().allow('').trim(),
         status: Joi.string().optional().allow('').trim()
     });
 };

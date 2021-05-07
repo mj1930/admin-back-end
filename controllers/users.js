@@ -50,7 +50,7 @@ module.exports = {
                 return res.json({ 
                     code: 400,
                     data: {},
-                    messgae: "User not registered.", 
+                    message: "User not registered.", 
                     error: null 
                 });
             }

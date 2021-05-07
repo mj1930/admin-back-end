@@ -6,6 +6,7 @@ router.post('/list-orders', orderCtrl.listOrders);
 router.post('/filter-orders', orderCtrl.filterProducts);
 router.post('/update-order', orderCtrl.updateOrderStatus);
 router.post('/sort-order', orderCtrl.sortOrder);
-router.post('/search-product', orderCtrl.searchProductsByTerm);
+router.post('/search-product', orderCtrl.searchOrdersByTerm);
+router.post('/search-product-id', orderCtrl.searchOrdersByOrderId);
 
 module.exports = router;
