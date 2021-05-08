@@ -83,18 +83,12 @@ module.exports = {
                 password
             });
             const sellerData = await data.save();
-            const accessToken = await jwtService.generateAccessToken({
-                _id: sellerData._id,
-                name: sellerData.name,
-                isAdmin: data.isAdmin
-            });
             delete sellerData.mobile;
             if (sellerData) {
                 return res.json({
                     code: 200,
                     message: 'Registration Completed!!',
                     data: sellerData,
-                    accessToken,
                     error: null
                 });
             } else {

@@ -61,8 +61,8 @@ const productSchema = new Schema({
         default: ""
     },
     productPrice: {
-        type: String,
-        default: ""
+        type: Number,
+        default: 0
     },
     availableUnits: {
         type: Number,
@@ -77,8 +77,8 @@ const productSchema = new Schema({
         default: 0
     },
     mrp: {
-        type: String,
-        default: ""
+        type: Number,
+        default: 0
     },
     description: {
         type: String,
