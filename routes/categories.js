@@ -8,5 +8,6 @@ router.post('/get-all-categories', categoryCtrl.listAllCategories);
 router.post('/get-all-subcategories', categoryCtrl.listAllSubCategories);
 router.post('/get-all', categoryCtrl.listAllCategoriesSubCategories);
 router.post('/sort-category', categoryCtrl.sortUser);
+router.post('/approve-disapprove-categories', categoryCtrl.approveDisapproveCategories);
 
 module.exports = router;

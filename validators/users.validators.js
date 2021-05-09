@@ -23,6 +23,34 @@ exports.listAllUsers = () => {
     });
 }
 
+exports.listAllCustomers = () => {
+    return Joi.object().keys({
+        skip: Joi.number().required(),
+        limit: Joi.number().required()
+    });
+}
+
+exports.approveCustomers = () => {
+    return Joi.object().keys({
+        customerId: Joi.string().required().trim(),
+        status: Joi.boolean().required()
+    });
+}
+
+exports.approveSeller = () => {
+    return Joi.object().keys({
+        sellerId: Joi.string().required().trim(),
+        status: Joi.boolean().required()
+    });
+}
+
+exports.approveAdminUser = () => {
+    return Joi.object().keys({
+        userId: Joi.string().required().trim(),
+        status: Joi.boolean().required()
+    });
+}
+
 exports.sortUser = () => {
     return Joi.object().keys({
         key: Joi.string().required().trim(),

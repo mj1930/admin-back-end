@@ -21,15 +21,19 @@ module.exports = {
                 businessName,
                 paymentMode
             });
-            // for (let i = 0; i < products.length;i++) {
-            await productSchema.updateOne({
-                _id: products.productId
-            }, {
-                $inc: {
-                    availableUnits: -products.quantity
-                }
-            });
-            // }
+            for (let i = 0; i < products.length;i++) {
+                let product = products[i];
+                await productSchema.updateOne({
+                    _id: product.productId
+                }, {
+                    $inc: {
+                        availableUnits: -parseInt(product.quantity)
+                    },
+                    $set:{
+                        soldUnits: parseInt(product.quantity)
+                    }
+                });
+            }
             return res.json({
                 code: 200,
                 data: orderData,

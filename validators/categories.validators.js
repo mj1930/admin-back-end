@@ -29,6 +29,13 @@ exports.listSubcategories = () => {
     });
 };
 
+exports.approveCategories = () => {
+    return Joi.object().keys({
+        categoryId: Joi.string().required().trim(),
+        status: Joi.boolean().required()
+    });
+}
+
 exports.listCategoriesSubCategories = () => {
     return Joi.object().keys({
         skip: Joi.number().required(),

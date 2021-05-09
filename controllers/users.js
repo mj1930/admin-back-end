@@ -2,6 +2,8 @@ const usersSchema = require('../models/admin/users');
 const sellerSchema = require('../models/users/users');
 const storeSchema = require('../models/stores/storenames');
 const permissionSchema = require('../models/admin/permissions');
+const customerSchema = require('../models/customers/users');
+const adminUserSchema = require('../models/admin/users');
 
 const userValidator = require('../validators/users.validators');
 const crypto = require('../utils/crypto/Crypto');
@@ -156,6 +158,35 @@ module.exports = {
         }
     },
 
+    listAllCustomers: async (req, res, next) => {
+        try {
+            let usersData = [];
+            let { skip, limit } = await userValidator.listAllCustomers().validateAsync(req.body);
+            usersData = await customerSchema.find({
+            })
+            .skip(skip)
+            .limit(limit)
+            .lean(); 
+        if (usersData && usersData.length > 0) {
+            return res.json({
+                code: 200,
+                data: usersData,
+                message: "Found all active users",
+                error: null
+            });
+            } else {
+                return res.json({
+                    code: 400,
+                    data: {},
+                    message: "No users found !!",
+                    error: null
+                });
+            }
+        } catch (err) {
+            next(err);
+        }
+    },
+
     getUserData: async (req, res, next) => {
         try {
             let userId = req.decoded._id;
@@ -223,6 +254,69 @@ module.exports = {
                 message: "Searched User",
                 error: null
             })
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    approveDisapproveCustomer: async (req, res, next) => {
+        try {
+            let { customerId, status } = await userValidator.approveCustomers().validateAsync(req.body);
+            let customerdata = await customerSchema.findOneAndUpdate({
+                _id: customerId
+            }, {
+                $set: {
+                    isDeleted: status
+                }
+            }, {new: true});
+            return res.json({
+                code: 200,
+                data: customerdata,
+                message: "Customer status changed",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    approveDisapproveSeller: async (req, res, next) => {
+        try {
+            let { sellerId, status } = await userValidator.approveSeller().validateAsync(req.body);
+            let customerdata = await sellerSchema.findOneAndUpdate({
+                _id: sellerId
+            }, {
+                $set: {
+                    isActive: status
+                }
+            }, {new: true});
+            return res.json({
+                code: 200,
+                data: customerdata,
+                message: "Seller status changed",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    approveDisapproveAdminUsers: async (req, res, next) => {
+        try {
+            let { userId, status } = await userValidator.approveAdminUser().validateAsync(req.body);
+            let customerdata = await adminUserSchema.findOneAndUpdate({
+                _id: sellerId
+            }, {
+                $set: {
+                    isActive: status
+                }
+            }, {new: true});
+            return res.json({
+                code: 200,
+                data: customerdata,
+                message: "Seller status changed",
+                error: null
+            });
         } catch (err) {
             next(err);
         }

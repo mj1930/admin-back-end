@@ -95,7 +95,6 @@ module.exports = {
         try {
             let { skip, limit } = await categoryValidator.listCategoriesSubCategories().validateAsync(req.body);
             let categoriesData = await categorySchema.find({
-                isDeleted: false
             })
             .sort({createdAt: -1})
             .skip(skip)
@@ -148,6 +147,27 @@ module.exports = {
                 code: 200,
                 data: categories,
                 message: "Sorted List",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    approveDisapproveCategories: async (req, res, next) => {
+        try {
+            let { categoryId, status } = await categoryValidator.approveCategories().validateAsync(req.body);
+            let customerdata = await categorySchema.findOneAndUpdate({
+                _id: categoryId
+            }, {
+                $set: {
+                    status
+                }
+            }, {new: true});
+            return res.json({
+                code: 200,
+                data: customerdata,
+                message: "Seller status changed",
                 error: null
             });
         } catch (err) {
