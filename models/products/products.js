@@ -104,6 +104,10 @@ const productSchema = new Schema({
         type: String,
         default: ""
     },
+    sku: {
+        type: String,
+        default: ""
+    },
     isApproved: {
         type: Boolean,
         default: false
