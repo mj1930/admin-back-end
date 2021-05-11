@@ -53,12 +53,12 @@ const productSchema = new Schema({
         default: ""
     },
     color: {
-        type: String,
-        default: ""
+        type: Array,
+        default: []
     },
     size: {
-        type: String,
-        default: ""
+        type: Array,
+        default: []
     },
     productPrice: {
         type: Number,
