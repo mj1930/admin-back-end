@@ -131,20 +131,35 @@ module.exports = {
     searchOrdersByTerm: async (req, res, next) => {
         try {
             const { skip, limit, search, status } = await orderValidator.searchOrders().validateAsync(req.body);
-            let productDetails = await orderSchema.find({
-                $and: [
-                    {
-                        orderStatus: status
-                    },
-                    {
-                        paymentMode: { $regex: new RegExp(search, 'i') }
-                    }
-                ]
-            }).sort({
-                createdAt: -1
-            }).skip(skip)
-                .limit(limit)
-                .lean()
+            let productDetails = [];
+            if (status) {
+                productDetails = await orderSchema.find({
+                    $and: [
+                        {
+                            orderStatus: status
+                        },
+                        {
+                            paymentMode: { $regex: new RegExp(search, 'i') }
+                        }
+                    ]
+                }).sort({
+                    createdAt: -1
+                }).skip(skip)
+                    .limit(limit)
+                    .lean()
+            } else {
+                productDetails = await orderSchema.find({
+                    $and: [
+                        {
+                            paymentMode: { $regex: new RegExp(search, 'i') }
+                        }
+                    ]
+                }).sort({
+                    createdAt: -1
+                }).skip(skip)
+                    .limit(limit)
+                    .lean()
+            }
             return res.send({
                 code: 200,
                 data: productDetails,
@@ -158,17 +173,11 @@ module.exports = {
 
     searchOrdersByOrderId: async (req, res, next) => {
         try {
-            const { skip, limit, orderId, status, search } = await orderValidator.searchOrdersById().validateAsync(req.body);
+            const { skip, limit, orderId } = await orderValidator.searchOrdersById().validateAsync(req.body);
             let productDetails = await orderSchema.find({
                 $and: [
                     {
                         _id: orderId
-                    },
-                    {
-                        orderStatus: status
-                    },
-                    {
-                        paymentMode: { $regex: new RegExp(search, 'i') }
                     }
                 ]
             }).sort({
