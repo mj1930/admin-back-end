@@ -8,6 +8,15 @@ module.exports = {
         try {
             let img = req.file ? req.file.location: "";
             let { category, subCategory } = await categoryValidator.addCategory().validateAsync(req.body);
+            let count = await categorySchema.countDocuments({categoryName: category});
+            if (count) {
+                return res.json({
+                    code: 201,
+                    data: {},
+                    message: "Category with same name already exists",
+                    error: null
+                });
+            }
             let addCategoryData = await categorySchema.create({
                 categoryName: category,
                 img,
@@ -80,6 +89,10 @@ module.exports = {
             .skip(skip)
             .limit(limit)
             .lean();
+            let category = await categorySchema.findOne({
+                _id: categoryId
+            }).lean();
+            subCategoriesData.push(category.categoryName);
             return res.json({
                 code: 200,
                 data: subCategoriesData,
@@ -107,11 +120,11 @@ module.exports = {
                     categoryName: category.categoryName,
                     categoryId: category._id,
                     status: category.status,
+                    deleted: category.isDeleted,
                     subCategories: []
                 };
                 let subCategoriesData = await subCategorySchema.find({
-                    categoryId: category._id,
-                    isDeleted: false
+                    categoryId: category._id
                 }, {_id: 1, subCategoryName: 1}).lean();
                 obj.subCategories = subCategoriesData;
                 dataArr.push(obj);
@@ -132,7 +145,9 @@ module.exports = {
             let { key, sortBy, skip, limit } = await categoryValidator.sortCategory().validateAsync(req.body);
             let query = {};
             query[key] = sortBy;
-            let categories = await categorySchema.find({})
+            let categories = await categorySchema.find({
+                isDeleted: false
+            })
             .sort(query)
             .skip(skip)
             .limit(limit)
@@ -158,16 +173,85 @@ module.exports = {
         try {
             let { categoryId, status } = await categoryValidator.approveCategories().validateAsync(req.body);
             let customerdata = await categorySchema.findOneAndUpdate({
-                _id: categoryId
+                _id: categoryId,
             }, {
                 $set: {
-                    status
+                    isDeleted: status
                 }
             }, {new: true});
             return res.json({
                 code: 200,
                 data: customerdata,
                 message: "Seller status changed",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    updateCategory: async (req, res, next) => {
+        try {
+            let { categoryId, categoryName } = await categoryValidator.updateCategory().validateAsync(req.body);
+            let count = await categorySchema.countDocuments({_id: { $ne: categoryId },categoryName});
+            if (count) {
+                return res.json({
+                    code: 200,
+                    data: {},
+                    message: "Category with same name already exists",
+                    error: null
+                });
+            }
+            let categoryUpdate = await categorySchema.findOneAndUpdate({
+                _id: categoryId
+            }, {
+                $set: {
+                    categoryName
+                }
+            }, { new: true}).lean();
+            return res.json({
+                code: 200,
+                data: {},
+                message: "Category updated successfully!!",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    updateSubCategory: async (req, res, next) => {
+        try {
+            let { categoryId, subCategory } = await categoryValidator.updateSubCategory().validateAsync(req.body);
+            let names = subCategory.map(data => {return data.name})
+            let count = await subCategorySchema.countDocuments({
+                categoryId: { $ne: categoryId }, 
+                subCategoryName: {$in : names}
+            });
+            if (count) {
+                return res.json({
+                    code: 200,
+                    data: {},
+                    message: "SubCategory with same name already exists",
+                    error: null
+                });
+            }
+            for (let i = 0; i < subCategory.length; i++) {
+                await subCategorySchema.findOneAndUpdate({
+                    _id: subCategory[i].id,
+                }, {
+                    $set: {
+                        subCategoryName: subCategory[i].name
+                    }
+                }).lean()
+            }
+            let updateSubCategoryData = await subCategorySchema.find({
+                categoryId
+            }).lean();
+            return res.json({
+                code: 200,
+                data: updateSubCategoryData,
+                message: "Updated Subcategory successfully !!",
                 error: null
             });
         } catch (err) {

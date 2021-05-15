@@ -24,7 +24,8 @@ exports.filterOrders = () => {
     return Joi.object().keys({
         skip:  Joi.number().required(),
         limit: Joi.number().required(),
-        status: Joi.string().required().trim()
+        status: Joi.string().required().trim(),
+        search: Joi.string().optional().allow('').trim()
     });
 };
 

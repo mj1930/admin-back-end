@@ -68,13 +68,30 @@ module.exports = {
 
     filterProducts: async (req, res, next) => {
         try {
-            let { skip, limit, status } = await orderValidator.filterOrders().validateAsync(req.body);
-            let orders = await orderSchema.find({
-                orderStatus: status
-            })
-                .skip(skip)
-                .limit(limit)
-                .lean();
+            let { skip, limit, status, search } = await orderValidator.filterOrders().validateAsync(req.body);
+            let orders = [];
+            if (search) {
+                orders = await orderSchema.find({
+                    $and: [
+                        {
+                            orderStatus: status
+                        },
+                        {
+                            paymentMode: { $regex: new RegExp(search, 'i') }
+                        }
+                    ]
+                })
+                    .skip(skip)
+                    .limit(limit)
+                    .lean();
+            } else {
+                orders = await orderSchema.find({
+                    orderStatus: status
+                })
+                    .skip(skip)
+                    .limit(limit)
+                    .lean();
+            }
             return res.json({
                 code: 200,
                 data: orders,
@@ -189,6 +206,27 @@ module.exports = {
                 code: 200,
                 data: productDetails,
                 message: "Searched list with all possibility",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
+    orderStatusFindOne: async (req, res, next) => {
+        try {
+            let id = req.params.id;
+            let orders = await orderSchema.findOne({
+                $and: [
+                    {
+                        _id: id
+                    }
+                ]
+            })
+            return res.json({
+                code: 200,
+                data: orders,
+                message: "Order data fetched",
                 error: null
             });
         } catch (err) {

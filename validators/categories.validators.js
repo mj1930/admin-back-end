@@ -14,6 +14,20 @@ exports.addSubCategory = () => {
     });
 };
 
+exports.updateSubCategory = () => {
+    return Joi.object().keys({
+        categoryId: Joi.string().required().trim(),
+        subCategory: Joi.array().required()
+    });
+};
+
+exports.updateCategory = () => {
+    return Joi.object().keys({
+        categoryId: Joi.string().required().trim(),
+        categoryName: Joi.string().required().trim()
+    });
+};
+
 exports.listCategories = () => {
     return Joi.object().keys({
         skip: Joi.number().required(),
