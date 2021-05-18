@@ -64,7 +64,7 @@ module.exports = {
     signup: async (req, res, next) => {
         try {
             let {
-                name, email, password
+                name, email, password, phone
             } = await userValidator.signup().validateAsync(req.body);
             let count = await usersSchema.countDocuments({
                 email
@@ -77,12 +77,13 @@ module.exports = {
                     error: null
                 }); 
             }
-            // mobile = await crypto.staticEncrypter(mobile);
+            phone = await crypto.staticEncrypter(phone);
             password = await crypto.staticEncrypter(password);
             let data = new usersSchema({
                 name,
                 email,
-                password
+                password,
+                phone
             });
             const sellerData = await data.save();
             delete sellerData.mobile;

@@ -11,7 +11,8 @@ exports.signup = () => {
     return Joi.object().keys({
         name: Joi.string().required().trim(),
         password: Joi.string().required().trim(),
-        email: Joi.string().email().required().trim()
+        email: Joi.string().email().required().trim(),
+        phone: Joi.string().required().trim()
     });
 };
 
