@@ -19,8 +19,21 @@ module.exports = {
             });
             if (count) {
                 let data = await usersSchema.findOne({
-                    email
+                    $and: [
+                        {email},
+                        {
+                            isActive: true
+                        }
+                    ]
                 }).lean();
+                if (!data) {
+                    return res.json({
+                        code: 400,
+                        data: {},
+                        message: "please contact administrator!!",
+                        accessToken: {}
+                    })
+                }
                 let userPassword = await crypto.staticDecrypter(data.password);
                 let id = data._id;
                 let permissions = await permissionSchema.findOne({
@@ -302,11 +315,32 @@ module.exports = {
         }
     },
 
+    VerifyUnverifySeller: async (req, res, next) => {
+        try {
+            let { sellerId, status } = await userValidator.approveSeller().validateAsync(req.body);
+            let customerdata = await sellerSchema.findOneAndUpdate({
+                _id: sellerId
+            }, {
+                $set: {
+                    isVerified: status
+                }
+            }, {new: true});
+            return res.json({
+                code: 200,
+                data: customerdata,
+                message: "Seller status changed",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
+    },
+
     approveDisapproveAdminUsers: async (req, res, next) => {
         try {
             let { userId, status } = await userValidator.approveAdminUser().validateAsync(req.body);
             let customerdata = await adminUserSchema.findOneAndUpdate({
-                _id: sellerId
+                _id: userId
             }, {
                 $set: {
                     isActive: status

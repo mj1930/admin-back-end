@@ -11,5 +11,7 @@ router.post('/sort-user', authorize, userCtrl.sortUser);
 router.post('/search-user', authorize, userCtrl.searchUser);
 router.post('/approve-disapprove-customer', authorize, userCtrl.approveDisapproveCustomer);
 router.post('/approve-disapprove-seller', authorize, userCtrl.approveDisapproveSeller);
+router.post('/approve-disapprove-admin-user', authorize, userCtrl.approveDisapproveAdminUsers);
+router.post('/verify-unverify-seller', authorize, userCtrl.VerifyUnverifySeller);
 
 module.exports = router;

@@ -225,8 +225,8 @@ module.exports = {
             let { categoryId, subCategory } = await categoryValidator.updateSubCategory().validateAsync(req.body);
             let names = subCategory.map(data => {return data.name})
             let count = await subCategorySchema.countDocuments({
-                categoryId: { $ne: categoryId }, 
-                subCategoryName: {$in : names}
+                categoryId,
+                subCategoryName: {$in : new RegExp(names, 'i')}
             });
             if (count) {
                 return res.json({
