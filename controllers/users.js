@@ -355,5 +355,45 @@ module.exports = {
         } catch (err) {
             next(err);
         }
+    },
+
+    getSellerDetails: async (req, res, next) => {
+        try {
+            let userId = req.body.id;
+            let userData = await sellerSchema.findOne({
+                _id: userId
+            }).lean();
+            userData.mobile = await crypto.staticDecrypter(userData.mobile);
+            if (userData.accountNumber)
+                userData.accountNumber = await crypto.staticDecrypter(userData.accountNumber);
+            if (userData.gstin)
+                userData.gstin = await crypto.staticDecrypter(userData.gstin);
+            if (userData.pan)
+                userData.pan = await crypto.staticDecrypter(userData.pan);
+            let storeData = await storeSchema.findOne({
+                userId
+            }).lean();
+            if (storeData)
+                userData['storeName'] = storeData.storename;
+            delete userData.password;
+            if (userData) {
+                return res.json({
+                    code: 200,
+                    message: 'User profile data found !!',
+                    data: userData,
+                    error: null
+                });
+            } else {
+                return res.json({
+                    code: 400,
+                    message: 'No user found !!',
+                    data: {},
+                    accessToken,
+                    error: null
+                });
+            }
+        } catch (err) {
+            next(err);
+        }
     }
 }
