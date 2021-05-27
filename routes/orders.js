@@ -11,6 +11,7 @@ router.get('/get-order/:id', orderCtrl.orderStatusFindOne);
 router.post('/search-product', orderCtrl.searchOrdersByTerm);
 router.post('/search-product-id', orderCtrl.searchOrdersByOrderId);
 router.get('/get-payments', paymentCtrl.listAllPayments);
+router.get('/print-invoice/:id', orderCtrl.printInvoice);
 router.post('/search-payments', paymentCtrl.searchByOrderId);
 
 module.exports = router;

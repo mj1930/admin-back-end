@@ -1,8 +1,11 @@
-const mongoose = require('mongoose');
 const orderSchema = require('../models/orders/orders');
 const productSchema = require('../models/products/products');
+const sellerSchema = require('../models/users/users');
+const userSchema = require('../models/customers/users');
 
 const orderValidator = require('../validators/orders.validators');
+const crypto = require('../utils/crypto/Crypto');
+
 const _ = require('underscore');
 
 module.exports = {
@@ -232,5 +235,38 @@ module.exports = {
         } catch (err) {
             next(err);
         }
+    },
+
+    printInvoice: async (req, res, next) => {
+        try {
+            let id = req.params.id;
+            let orders = await orderSchema.findOne({
+                $and: [
+                    {
+                        _id: id
+                    }
+                ]
+            }).lean();
+            let sellerIds = orders?.products?.length ? _.map(orders.products, 'sellerId') : [];
+            let sellerData = await sellerSchema.find({
+                _id : { $in : sellerIds }
+            }, { address: 1, name: 1, gstin: 1, pan: 1}).lean();
+            for (let i = 0; i < sellerData.length;i++) {
+                let pan = sellerData[i].pan ? await crypto.staticDecrypter(sellerData[i].pan) : '';
+                let gstin = sellerData[i].gstin ? await crypto.staticDecrypter(sellerData[i].gstin) : '';
+                sellerData[i]['pan'] = pan;
+                sellerData[i]['gstin'] = gstin;
+            }
+            orders['sellerDetails'] = sellerData;
+            return res.json({
+                code: 200,
+                data: orders,
+                message: "",
+                error: null
+            });
+        } catch (err) {
+            next(err);
+        }
     }
+
 }

@@ -17,7 +17,8 @@ exports.addSubCategory = () => {
 exports.updateSubCategory = () => {
     return Joi.object().keys({
         categoryId: Joi.string().required().trim(),
-        subCategory: Joi.array().required()
+        subCategoryId: Joi.string().required().trim(),
+        subCategory: Joi.string().required()
     });
 };
 

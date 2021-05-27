@@ -193,7 +193,10 @@ module.exports = {
     updateCategory: async (req, res, next) => {
         try {
             let { categoryId, categoryName } = await categoryValidator.updateCategory().validateAsync(req.body);
-            let count = await categorySchema.countDocuments({_id: { $ne: categoryId },categoryName});
+            let count = await categorySchema.countDocuments({
+                _id: { $ne: categoryId },
+                categoryName: new RegExp(categoryName, 'i')
+            });
             if (count) {
                 return res.json({
                     code: 200,
@@ -202,7 +205,7 @@ module.exports = {
                     error: null
                 });
             }
-            let categoryUpdate = await categorySchema.findOneAndUpdate({
+            await categorySchema.findOneAndUpdate({
                 _id: categoryId
             }, {
                 $set: {
@@ -222,11 +225,9 @@ module.exports = {
 
     updateSubCategory: async (req, res, next) => {
         try {
-            let { categoryId, subCategory } = await categoryValidator.updateSubCategory().validateAsync(req.body);
-            let names = subCategory.map(data => {return data.name})
+            let { categoryId, subCategory, subCategoryId } = await categoryValidator.updateSubCategory().validateAsync(req.body);
             let count = await subCategorySchema.countDocuments({
-                categoryId,
-                subCategoryName: {$in : new RegExp(names, 'i')}
+                subCategoryName: new RegExp(subCategory, 'i')
             });
             if (count) {
                 return res.json({
@@ -236,15 +237,13 @@ module.exports = {
                     error: null
                 });
             }
-            for (let i = 0; i < subCategory.length; i++) {
-                await subCategorySchema.findOneAndUpdate({
-                    _id: subCategory[i].id,
-                }, {
-                    $set: {
-                        subCategoryName: subCategory[i].name
-                    }
-                }).lean()
-            }
+            await subCategorySchema.findOneAndUpdate({
+                _id: subCategoryId,
+            }, {
+                $set: {
+                    subCategoryName: subCategory
+                }
+            }).lean()
             let updateSubCategoryData = await subCategorySchema.find({
                 categoryId
             }).lean();

@@ -4,6 +4,7 @@ const storeSchema = require('../models/stores/storenames');
 const permissionSchema = require('../models/admin/permissions');
 const customerSchema = require('../models/customers/users');
 const adminUserSchema = require('../models/admin/users');
+const productSchema = require('../models/products/products');
 
 const userValidator = require('../validators/users.validators');
 const crypto = require('../utils/crypto/Crypto');
@@ -146,6 +147,18 @@ module.exports = {
                 let storeData = await storeSchema.findOne({
                     userId: usersData[i]._id
                 }).lean();
+                let allListedProductsCount = await productSchema.countDocuments({
+                    $and: [
+                        { userId: usersData[i]['_id']},
+                        { isApproved: true },
+                        {
+                            availableUnits: {
+                                $gt: 0
+                            }
+                        }
+                    ]
+                })
+                usersData[i]["listedProductCount"] = allListedProductsCount;
                 usersData[i]["storename"] = storeData ? storeData.storename : "";
             }
             // usersData.forEach(async (user, i) => {
